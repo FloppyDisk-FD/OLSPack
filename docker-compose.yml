@@ -1,20 +1,20 @@
 version: '3'
 services:
-  mysql:
-    image: mariadb:10.3.17
+  db:
+    image: ${DB_TYPE}:${DB_VERSION}
     command: --max_allowed_packet=256M
     volumes:
       - "./data/db:/var/lib/mysql:delegated"
     ports:
        - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     restart: always
   litespeed:
-    image: litespeedtech/openlitespeed:${OLS_VERSION}-${PHP_VERSION}
+    image: heremoryoo/openlitespeed:${OLS_VERSION}-${PHP_VERSION}
     env_file:
       - .env
     volumes:
@@ -32,12 +32,14 @@ services:
     restart: always
     environment:
       TZ: ${TimeZone}
-  phpmyadmin:
-    #image: bitnami/phpmyadmin:latest
-    image: bitnami/phpmyadmin:5.0.2-debian-10-r72
-    ports:
-      - 8080:80
-      - 8443:443
-    environment:
-        DATABASE_HOST: mysql
-    restart: always    
+ # phpmyadmin:
+ #   image: bitnami/phpmyadmin:5.0.2-debian-10-r72
+ #   ports:
+ #     - 8080:80
+ #    - 8443:443
+ #   environment:
+ #      DATABASE_HOST: mysql
+ #   restart: always
+ 
+  
+  
