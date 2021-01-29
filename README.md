@@ -1,10 +1,4 @@
-# OpenLiteSpeed WordPress Docker Container
-[![Build Status](https://travis-ci.com/litespeedtech/ols-docker-env.svg?branch=master)](https://hub.docker.com/r/litespeedtech/openlitespeed)
-[![docker pulls](https://img.shields.io/docker/pulls/litespeedtech/openlitespeed?style=flat&color=blue)](https://hub.docker.com/r/litespeedtech/openlitespeed)
-[<img src="https://img.shields.io/badge/slack-LiteSpeed-blue.svg?logo=slack">](litespeedtech.com/slack) 
-[<img src="https://img.shields.io/twitter/follow/litespeedtech.svg?label=Follow&style=social">](https://twitter.com/litespeedtech)
-
-Install a lightweight WordPress container with OpenLiteSpeed Edge or Stable version based on Ubuntu 18.04 Linux.
+# OLSPack
 
 ### Prerequisites
 1. [Install Docker](https://www.docker.com/)
@@ -17,11 +11,11 @@ Feel free to check [Docker hub Tag page](https://hub.docker.com/repository/docke
 ## Installation
 Clone this repository or copy the files from this repository into a new folder:
 ```
-git clone https://github.com/litespeedtech/ols-docker-env.git
+git clone https://github.com/FloppyDisk-FD/OLSPack.git
 ```
 Open a terminal, `cd` to the folder in which `docker-compose.yml` is saved, and run:
 ```
-docker-compose up
+docker-compose up -d
 ```
 
 Note: If you wish to run a single web server container, please see the [usage method here](https://github.com/litespeedtech/ols-dockerfiles#usage).
@@ -29,33 +23,26 @@ Note: If you wish to run a single web server container, please see the [usage me
 ## Components
 The docker image installs the following packages on your system:
 
-|Component|Version|
-| :-------------: | :-------------: |
-|Linux|Ubuntu 18.04|
-|OpenLiteSpeed|[Latest version](https://openlitespeed.org/downloads/)|
-|MariaDB|[Stable version: 10.3](https://hub.docker.com/_/mariadb)|
-|PHP|[Latest version](http://rpms.litespeedtech.com/debian/)|
-|LiteSpeed Cache|[Latest from WordPress.org](https://wordpress.org/plugins/litespeed-cache/)|
-|ACME|[Latest from ACME official](https://github.com/acmesh-official/get.acme.sh)|
-|WordPress|[Latest from WordPress](https://wordpress.org/download/)|
-|phpMyAdmin|[Latest from dockerhub](https://hub.docker.com/r/bitnami/phpmyadmin/)|
-
 ## Data Structure
 Cloned project 
-```bash
+```
 ├── acme
 ├── bin
 │   └── container
 ├── data
-│   └── db
+│   ├── db
+|   └── redis
 ├── logs
 │   ├── access.log
 │   ├── error.log
 │   ├── lsrestart.log
 │   └── stderr.log
-├── lsws
-│   ├── admin-conf
-│   └── conf
+├── conf
+|   ├── lsws
+|   |    ├──admin-conf
+|   |    └── conf
+|   └── redis
+|       └── redis.conf
 ├── sites
 │   └── localhost
 ├── LICENSE
@@ -67,11 +54,11 @@ Cloned project
 
   * `bin` contains multiple CLI scripts to allow you add or delete virtual hosts, install applications, upgrade, etc 
 
-  * `data` stores the MySQL database
+  * `data` stores the MySQL/Redis database
+  
+  * `conf` lsws & redis config directory
 
   * `logs` contains all of the web server logs and virtual host access logs
-
-  * `lsws` contains all web server configuration files
 
   * `sites` contains the document roots (the WordPress application will install here)
 
@@ -169,21 +156,15 @@ If you want to customize the image by adding some packages, e.g. `lsphp74-pspell
 FROM litespeedtech/openlitespeed:latest
 RUN apt-get update && apt-get install lsphp74-pspell -y
 ```
-3. Add `build: ./custom` line under the "image: litespeedtech" of docker-composefile. So it will looks like this 
+3. Add `build: ./custom` line under the "image: litespeedtech" of docker-compose file. So it will looks like this 
 ```
   litespeed:
-    image: litespeedtech/openlitespeed:${OLS_VERSION}-${PHP_VERSION}
+    image: heremoryoo/openlitespeed:${OLS_VERSION}-${PHP_VERSION}
     build: ./custom
 ```
 4. Build and start it with command:
 ```
 docker-compose up --build
 ```
-
-## Support & Feedback
-If you still have a question after using OpenLiteSpeed Docker, you have a few options.
-* Join [the GoLiteSpeed Slack community](https://litespeedtech.com/slack) for real-time discussion
-* Post to [the OpenLiteSpeed Forums](https://forum.openlitespeed.org/) for community support
-* Reporting any issue on [Github ols-docker-env](https://github.com/litespeedtech/ols-docker-env/issues) project
 
 **Pull requests are always welcome** 
