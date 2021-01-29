@@ -18,8 +18,8 @@ services:
     env_file:
       - .env
     volumes:
-        - ./lsws/conf:/usr/local/lsws/conf
-        - ./lsws/admin-conf:/usr/local/lsws/admin/conf
+        - ./conf/lsws/conf:/usr/local/lsws/conf
+        - ./conf/lsws/admin-conf:/usr/local/lsws/admin/conf
         - ./bin/container:/usr/local/bin
         - ./sites:/var/www/vhosts/
         - ./acme:/root/.acme.sh/
@@ -40,6 +40,17 @@ services:
  #   environment:
  #      DATABASE_HOST: mysql
  #   restart: always
- 
-  
-  
+ # redis:
+ #   image: redis:${REDIS_VERSION}
+ #   container_name: redis
+ #   ports:
+ #     - "6379:6379"
+ #   volumes:
+ #     - ./conf/redis/redis.conf:/etc/redis/redis.conf
+ #     - ./data/redis/data:/data
+ #     - ./logs/redis:/var/logs/redis
+ #   restart: always
+ #   command: redis-server /etc/redis/redis.conf --appendonly yes
+ #   environment:
+ #     TZ: ${TimeZone}
+   
